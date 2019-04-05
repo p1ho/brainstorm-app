@@ -2,7 +2,12 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', crossorigin='anonymous')
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='/javascripts/websocket.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', crossorigin='anonymous')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', crossorigin='anonymous')
+    script(src='/javascripts/form_functions.js')
+    script(src='/javascripts/main.js')
   body
     block content
