@@ -224,13 +224,13 @@ function setRoundTwoView(container, data) {
     })
   })
 
-  container.prepend(getClock(.2, container, () => {
+  container.prepend(getClock(.1, container, () => {
     let processedData = []
     for (let i = 1; i < numOfIdeas + 1; i++) {
       let originDatum = document.querySelector(`input[name=origin-${i}]`)
       let ideaDatum = document.querySelector(`input[name=idea-${i}]`)
 
-      let originLi = document.querySelector(`li[data-id="${originDatum.value}]"`)
+      let originLi = document.querySelector(`li[data-id="${originDatum.value}"]`)
       processedData.push({
         originId: originDatum.value,
         origin: originLi !== null ? originLi.getAttribute('data-raw') : "",
@@ -266,12 +266,16 @@ function setVoteView(container, data) {
     for (let i in data[user].roundTwoIdeas) {
       if (!(!seeSelf && username === user)) {
         let li = document.createElement('li')
+        li.classList.add('cursor-ptr')
         setAttributes(li, {
           'data-id': data[user].roundTwoIdeas[i].ideaId,
           'data-raw': data[user].roundTwoIdeas[i].idea,
           'tabindex': 0
         })
-        li.innerHTML = `<strong>${li.getAttribute('data-id')}</strong>: ${li.getAttribute('data-raw')}`
+        li.innerHTML = `
+        <strong>${li.getAttribute('data-raw')}</strong>
+        <em>(inspired by "${data[user].roundTwoIdeas[i].origin}")</em>
+        `
         voteListUl.appendChild(li)
       }
     }
