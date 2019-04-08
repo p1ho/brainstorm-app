@@ -96,20 +96,21 @@ function setRoomView(container, users) {
   <h2>Connected</h2>
   <div class="connected"></div>
   <p>Round will start when everyone is ready</p>
-  <button>Ready</button>
+  <form><input type="submit" value="Ready"></form>
   `
 
   setUsers(container, users)
 
-  var ready = container.querySelector('button')
-  ready.onclick = () => {
-    if (ready.innerHTML === 'Ready') {
+  var form = container.querySelector('form')
+  var ready = form.querySelector('input[type=submit]')
+  form.onsubmit = () => {
+    if (ready.value === 'Ready') {
       ws.send(JSON.stringify({
         name: username,
         type: "ready",
         message: "Ready for round start",
       }))
-      ready.innerHTML = 'Unready'
+      ready.value = 'Unready'
       ready.classList.add('unready')
     } else {
       ws.send(JSON.stringify({
@@ -117,10 +118,12 @@ function setRoomView(container, users) {
         type: "unready",
         message: "Unready for round start",
       }))
-      ready.innerHTML = 'Ready'
+      ready.value = 'Ready'
       ready.classList.remove('unready')
     }
+    return false
   }
+  ready.focus()
 }
 
 function setRoundOneView(container) {
@@ -216,7 +219,7 @@ function setRoundTwoView(container, data) {
       if (e.relatedTarget && e.relatedTarget.hasAttribute('data-id')) {
         e.target.value = e.relatedTarget.getAttribute('data-id')
 
-        e.target.style.backgroundColor = "#ccffcc"
+        e.target.classList.add('selected')
         let inputNum = +e.target.getAttribute('name').replace("origin-", "")
         Array.from(ideaListUl.children).forEach(child => {child.classList.remove('cursor-ptr')})
 
