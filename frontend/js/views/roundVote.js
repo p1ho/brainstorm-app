@@ -34,13 +34,16 @@ module.exports = (data, ws) => {
         selected[li.getAttribute('data-id')] = false
 
         const toggle = (e) => {
-          let dataId = e.target.getAttribute('data-id')
-          if (e.target.classList.contains('selected')) {
-            e.target.classList.remove('selected')
+          let targetLi = e.target.closest('li')
+          if (!targetLi) { return }
+
+          let dataId = targetLi.getAttribute('data-id')
+          if (targetLi.classList.contains('selected')) {
+            targetLi.classList.remove('selected')
             selected[dataId] = false
             selectedTemp.splice(selectedTemp.indexOf(dataId), 1)
           } else {
-            e.target.classList.add('selected')
+            targetLi.classList.add('selected')
             selected[dataId] = true
             selectedTemp.push(dataId)
             if (selectedTemp.length > maxVote) {
@@ -61,7 +64,7 @@ module.exports = (data, ws) => {
     }
   })
 
-  container.prepend(getClock(minPerRound, container, () => {
+  container.prepend(getClock(minPerRound, () => {
     ws.send(JSON.stringify({
       name: ws.username,
       type: 'submission',
