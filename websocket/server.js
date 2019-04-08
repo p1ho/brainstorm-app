@@ -1,11 +1,20 @@
+// test variables
+var roomSize = 2
+var currentRound = 1
+var countDownTime = 1
+var usersReady = {}
+var usersData = {}
+var usersLookup = {}
+var countDown // storing setInterval()
+
 var ws = require('ws');
 var events = require('events')
-
-var users = {}
-var usersLookup = {}
 var customEvents = new events.EventEmitter()
 
+// =============================================================================
+
 // Websocket server
+
 var WebSocketServer = ws.Server,
 ws = new WebSocketServer({port: 80})
 var uid = 0
@@ -17,7 +26,7 @@ ws.on('connection', function (client) {
 
   client.on('message', function (raw) {
     message = JSON.parse(raw)
-    console.log('received: [%s] %s', message.type, message.message)
+    console.log('received from "%s": [%s] %s', message.name, message.type, message.message)
 
     if (typeof(message) !== "object") {
       client.send(JSON.stringify({
@@ -27,9 +36,7 @@ ws.on('connection', function (client) {
     } else {
       switch (message.type) {
         case "register":
-          users[message.name] = {
-            ready: false
-          }
+          usersReady[message.name] = false
           usersLookup[this.id] = message.name
           customEvents.emit('newUser', {
             message: 'new user added to data store',
@@ -39,32 +46,91 @@ ws.on('connection', function (client) {
           client.send(JSON.stringify({
             type: "success",
             message: "You are connected and registered!",
-            users: users
+            users: usersReady
           }))
 
-          console.log(users)
+          console.log(usersReady)
         break
 
         case "ready":
-          users[message.name].ready = true
+          usersReady[message.name] = true
           customEvents.emit('readyStateChange', {
             message: 'user changed ready state',
-            name: message.name,
-            users: users
+            name: message.name
           })
 
-          console.log(users)
+          if (Object.keys(usersLookup).length === roomSize) {
+            // if everyone ready
+            allReady = true
+            for (let user of Object.values(usersLookup)) {
+              if (!usersReady[user]) {
+                allReady = false
+                break
+              }
+            }
+            if (allReady) {
+              var sec = countDownTime
+              countDown = setInterval(() => {
+                if (sec !== 0) {
+                  console.log(`Counting Down: ${sec} seconds left.`)
+                } else {
+                  console.log('Countdown Complete, Round Starting!')
+                  clearInterval(countDown)
+                }
+                customEvents.emit('countDown', {
+                  timeLeft: sec
+                })
+                sec--
+              }, 1000)
+            }
+          }
+
         break
 
         case "unready":
-          users[message.name].ready = false
+          usersReady[message.name] = false
           customEvents.emit('readyStateChange', {
             message: 'user changed ready state',
-            name: message.name,
-            users: users
+            name: message.name
           })
 
-          console.log(users)
+          console.log(usersReady)
+          if (countDown) {
+            clearInterval(countDown)
+            customEvents.emit('countDownStop')
+          }
+        break
+
+        case "submission":
+          switch (message.roundNum) {
+            case 1:
+              usersData[message.name] = {
+                roundOneIdeas: message.data
+              }
+              client.send(JSON.stringify({
+                type: "success",
+                message: "Your form was successfully submitted and recorded",
+                users: usersReady
+              }))
+            break
+            case 2:
+              usersData[message.name].roundTwoIdeas = message.data
+              client.send(JSON.stringify({
+                type: "success",
+                message: "Your form was successfully submitted and recorded",
+                users: usersReady
+              }))
+            break
+            case 3:
+              usersData[message.name].roundThreeIdeas = message.data
+              client.send(JSON.stringify({
+                type: "over",
+                message: "The session is over, terminating and sending final results",
+                data: usersData
+              }))
+            break
+          }
+          console.log(message.data)
         break
 
       }
@@ -80,13 +146,17 @@ ws.on('connection', function (client) {
   })
 })
 
+// =============================================================================
+
+// handling custom events
+
 customEvents.on('newUser', function (ev) {
   ws.clients.forEach(client => {
     client.send(JSON.stringify({
       type: "newUser",
       message: "New user connected to room",
       user: ev.name,
-      users: users
+      users: usersReady
     }))
   })
 })
@@ -97,24 +167,72 @@ customEvents.on('readyStateChange', function (ev) {
       type: "readyStateChange",
       message: "Someone changed ready state",
       user: ev.name,
-      users: users
+      users: usersReady
+    }))
+  })
+})
+
+customEvents.on('countDown', function (ev) {
+  if (ev.timeLeft > 0) {
+    ws.clients.forEach(client => {
+      client.send(JSON.stringify({
+        type: "countDown",
+        message: "Counting down before round starts",
+        timeLeft: ev.timeLeft
+      }))
+    })
+  } else {
+    Object.keys(usersReady).forEach(user => {
+      usersReady[user] = false
+    })
+    switch (currentRound) {
+      case 1:
+        formData = []
+      break
+      case 2:
+        formData = usersData
+      break
+      case 3:
+        formData = usersData
+      break
+    }
+    ws.clients.forEach(client => {
+      client.send(JSON.stringify({
+        type: "roundStart",
+        message: "Starting round",
+        roundNum: currentRound,
+        data: formData
+      }))
+    })
+    currentRound++
+  }
+})
+
+customEvents.on('countDownStop', function (ev) {
+  ws.clients.forEach(client => {
+    client.send(JSON.stringify({
+      type: "countDownStop",
+      message: "Stop the countdown"
     }))
   })
 })
 
 customEvents.on('connectionClose', function (ev) {
-  delete users[ev.user]
+  delete usersReady[ev.user]
   delete usersLookup[ev.userId]
   ws.clients.forEach(client => {
     client.send(JSON.stringify({
       type: "userDisconnect",
       message: "Someone disconnected",
-      users: users
+      users: usersReady
     }))
   })
 })
 
-// operations for detecting dropped connections
+// =============================================================================
+
+//operations for detecting dropped connections
+
 function noop() {}
 
 function heartbeat() {
@@ -126,7 +244,7 @@ const interval = setInterval(function ping() {
   ws.clients.forEach(function each(client) {
     if (client.isAlive === false) {
       hasDropped = true
-      delete users[ev.user]
+      delete usersReady[ev.user]
       delete usersLookup[ev.userId]
       return client.terminate()
     }
@@ -139,7 +257,7 @@ const interval = setInterval(function ping() {
       client.send(JSON.stringify({
         type: "userDisconnect",
         message: "Someone disconnected",
-        users: users
+        users: usersReady
       }))
     })
   }

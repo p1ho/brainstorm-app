@@ -10,20 +10,28 @@ function wsMessageHandler(e) {
   console.log(data)
   var container = document.getElementById('app')
   var state = container.getAttribute('data-state')
-  switch (state){
-    case 'login':
-      container.innerHTML = ""
-      setRoomView(container, data.users)
-    break
-
-    case 'room':
-      if (["newUser", "readyStateChange", "userDisconnect"].includes(data.type)) {
-        setUsers(container, data.users)
-      } else if (data.type === 'roundStart') {
-        console.log('handle next view')
+  if (['login', 'roundOne', 'roundTwo', 'roundThree'].includes(state)) {
+    setRoomView(container, data.users)
+  } else if (state === 'room') {
+    if (["newUser", "readyStateChange", "userDisconnect"].includes(data.type)) {
+      setUsers(container, data.users)
+    } else if (data.type === 'countDown') {
+      container.querySelector('p').innerHTML = `Round Starting in ${data.timeLeft} seconds...`
+    } else if (data.type === 'countDownStop') {
+      container.querySelector('p').innerHTML = `Round will start when everyone is ready`
+    } else if (data.type === 'roundStart') {
+      switch (data.roundNum) {
+        case 1:
+          setRoundOneView(container)
+        break
+        case 2:
+          setRoundTwoView(container, data.data)
+        break
+        case 3:
+          setVoteView(container, data.data)
+        break
       }
-
-    break
+    } // else do nothing
   }
 }
 
@@ -71,7 +79,7 @@ function setUsers(container, users) {
     if (users.hasOwnProperty(name)) {
       let avatar = document.createElement('div')
       avatar.innerHTML = name
-      if (!users[name].ready) {
+      if (!users[name]) {
         avatar.classList.add('unready')
       }
       connected.appendChild(avatar)
@@ -84,6 +92,7 @@ function setRoomView(container, users) {
   container.innerHTML = `
   <h2>Connected</h2>
   <div class="connected"></div>
+  <p>Round will start when everyone is ready</p>
   <button>Ready</button>
   `
 
@@ -111,12 +120,15 @@ function setRoomView(container, users) {
   }
 }
 
-function getRoundOneView(container) {
-  var numOfIdeas = 3
-  var container = document.createElement('section')
-  container.id = 'app'
+function setRoundOneView(container) {
   container.setAttribute('data-state', 'roundOne')
-  var html = '<form autocomplete="off">'
+  var html = `
+  <p>
+  Please put down ${numOfIdeas} ideas before time runs out.<br>
+  If you have more than ${numOfIdeas} ideas, pick the ${numOfIdeas} best ones 😃
+  </p>
+  <form autocomplete="off">
+  `
   for (let i = 1; i < numOfIdeas+1; i++) {
     html += `
     <label>Idea ${i}</label><input type="text" name="idea-${i}"><br>
@@ -125,60 +137,156 @@ function getRoundOneView(container) {
   html += `</form>`
 
   container.innerHTML = html
-  container.prepend(getClock(.2, container))
-  return container
+  container.prepend(getClock(.1, container, () => {
+    let formData = document.querySelectorAll("input[name^=idea]")
+    ws.send(JSON.stringify({
+      name: username,
+      type: "submission",
+      message: "Submitted form for round 1",
+      roundNum: 1,
+      data: Array.from(formData).map((input, i) => {
+        return {
+          ideaId: `${username}-${i}`,
+          idea: input.value
+        }
+      })
+    }))
+  }))
+
 }
 
-function getRoundTwoView(container) {
-  var container = document.createElement('section')
-  container.id = 'app'
+function setRoundTwoView(container, data) {
   container.setAttribute('data-state', 'roundTwo')
   container.innerHTML = `
+  <p>
+  In this round, you can only work off of ideas from round 1.<br>
+  Click on the small box, and select an idea from the list that inspired you,
+  then type your new idea in the second input box.
+  </p>
   <form autocomplete="off">
-    <div class="idea-list-container">
-    <select id="idea-list" size="5">
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-      <option value="4">Four</option>
-    </select>
-    </div>
-    <div class="new-idea-container">
-    <label>Idea 1</label><input type="text" name="origin-1" size="1"><input type="text" name="idea-1" disabled><br>
-    <label>Idea 2</label><input type="text" name="origin-2" size="1"><input type="text" name="idea-2" disabled><br>
-    <label>Idea 3</label><input type="text" name="origin-3" size="1"><input type="text" name="idea-3" disabled><br>
-    </div>
+    <div class="idea-list-container"><ul></ul></div>
+    <div class="new-idea-container"></div>
   </form>
   `
-  container.prepend(getClock(.2, container))
-  return container
+
+  let ideaListUl = container.querySelector('.idea-list-container ul')
+
+  Object.keys(data).forEach(user => {
+    for (let i in data[user].roundOneIdeas) {
+      if (!(!seeSelf && username === user)) {
+        let li = document.createElement('li')
+        setAttributes(li, {
+          'data-id': data[user].roundOneIdeas[i].ideaId,
+          'data-raw': data[user].roundOneIdeas[i].idea,
+          'tabindex': 0
+        })
+        li.innerHTML = `<strong>${li.getAttribute('data-id')}</strong>: ${li.getAttribute('data-raw')}`
+        ideaListUl.appendChild(li)
+      }
+    }
+  })
+
+  var newIdeaHtml = []
+  for (let i = 1; i < numOfIdeas + 1; i++) {
+    newIdeaHtml.push(
+      [
+        `<label>Idea ${i}</label>`,
+        `<input type="text" name="origin-${i}" size="1">`,
+        `<input type="text" name="idea-${i}" disabled><br>`
+      ].join('')
+    )
+  }
+  container.querySelector('.new-idea-container').innerHTML = newIdeaHtml.join('')
+
+  // add handling for origin idea inputs
+  let ideasOrigin = container.querySelectorAll('input[name^=origin]')
+  ideasOrigin.forEach(node => {
+    node.addEventListener("focus", e => {
+      e.target.classList.add('highlight')
+      ideaListUl.classList.add('highlight')
+      Array.from(ideaListUl.children).forEach(child => {child.classList.add('cursor-ptr')})
+    })
+    node.addEventListener("blur", e => {
+      e.target.classList.remove('highlight')
+      ideaListUl.classList.remove('highlight')
+
+      if (e.relatedTarget.hasAttribute('data-id')) {
+        e.target.value = e.relatedTarget.getAttribute('data-id')
+
+        e.target.style.backgroundColor = "#ccffcc"
+        let inputNum = +e.target.getAttribute('name').replace("origin-", "")
+        Array.from(ideaListUl.children).forEach(child => {child.classList.remove('cursor-ptr')})
+
+        let newIdea = document.querySelector(`input[name=idea-${inputNum}]`)
+        newIdea.disabled = false
+        newIdea.focus()
+      }
+    })
+  })
+
+  container.prepend(getClock(.2, container, () => {
+    let processedData = []
+    for (let i = 1; i < numOfIdeas + 1; i++) {
+      let originDatum = document.querySelector(`input[name=origin-${i}]`)
+      let ideaDatum = document.querySelector(`input[name=idea-${i}]`)
+
+      let originLi = document.querySelector(`li[data-id="${originDatum.value}]"`)
+      processedData.push({
+        originId: originDatum.value,
+        origin: originLi !== null ? originLi.getAttribute('data-raw') : "",
+        ideaId: `${originDatum.value}-${username}-${i}`,
+        idea: ideaDatum.value
+      })
+    }
+    ws.send(JSON.stringify({
+      name: username,
+      type: "submission",
+      message: "Submitted form for round 2",
+      roundNum: 2,
+      data: processedData
+    }))
+  }))
+
 }
 
-function getVoteView(container) {
-  var container = document.createElement('section')
-  container.id = 'app'
+function setVoteView(container, data) {
   container.setAttribute('data-state', 'vote')
   container.innerHTML = `
+  <p>
+  This is the voting round, you will vote for ideas that were generated only in the second round,
+  You can only cast 3 votes.
+  </p>
   <form autocomplete="off">
-    <div class="vote-list-container">
-    <select id="vote-list" size="5">
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-      <option value="4">Four</option>
-    </select>
-    </div>
+    <div class="vote-list-container"><ul></ul></div>
   </form>
   `
-  container.prepend(getClock(.2, container))
-  return container
+
+  let voteListUl = container.querySelector('.vote-list-container ul')
+  Object.keys(data).forEach(user => {
+    for (let i in data[user].roundTwoIdeas) {
+      if (!(!seeSelf && username === user)) {
+        let li = document.createElement('li')
+        setAttributes(li, {
+          'data-id': data[user].roundTwoIdeas[i].ideaId,
+          'data-raw': data[user].roundTwoIdeas[i].idea,
+          'tabindex': 0
+        })
+        li.innerHTML = `<strong>${li.getAttribute('data-id')}</strong>: ${li.getAttribute('data-raw')}`
+        voteListUl.appendChild(li)
+      }
+    }
+  })
+
+  container.prepend(getClock(.2, container, () => {
+    console.log('handle vote result submission')
+  }))
 }
 
 function getResultView(container) {
 
 }
 
-function getClock(min, container) {
+function getClock(min, container, callback) {
   const getTimeString = (sec) => {
     var m = Math.floor(sec / 60)
     var s = sec % 60
@@ -197,8 +305,8 @@ function getClock(min, container) {
     totalSeconds -= 1
     clock.innerHTML = getTimeString(totalSeconds)
     if (totalSeconds <= 0) {
-      console.log(container)
       clearInterval(counter)
+      callback()
     }
   }
 

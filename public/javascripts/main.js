@@ -1,14 +1,15 @@
+// test variables
+var seeSelf = false // false for design-fixation prevention mode, true for unaltered
+var numOfIdeas = 3
+
+
 const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
 const socketUrl = socketProtocol + '//' + window.location.hostname + ':80'
 var ws
 var username
 
 window.onload = () => {
-  var container = document.createElement('section')
-  container.id = 'app'
-  document.body.appendChild(container)
-
-  setLoginView(container)
+  setLoginView(document.getElementById('app'))
 }
 
 window.onbeforeunload = () => {
