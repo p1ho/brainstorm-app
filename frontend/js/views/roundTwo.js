@@ -1,5 +1,5 @@
 const { getClock, setAttributes } = require('./utils')
-const { minPerRound, numOfIdeas } = require('../settings')
+const { minPerRound, numOfIdeas, seeSelf } = require('../settings')
 
 module.exports = (data, ws) => {
   var container = document.getElementById('app')

@@ -1,3 +1,4 @@
+const WebSocket = require('ws')
 const wsSettings = require('./websocket/settings')
 const wsMessageHandler = require('./websocket/messageHandler')
 

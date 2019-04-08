@@ -3,7 +3,10 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
-var wsServer = require('./websocket/server')
+
+// create websocket endpoint
+require('./websocket/server')
+
 var port = 3000
 
 var app = express()

@@ -1,8 +1,8 @@
 const getTimeString = (sec) => {
-  var m = Math.floor(sec / 60)
-  var s = sec % 60
-  mStr = m >= 10 ? m : '0' + m
-  sStr = s >= 10 ? s : '0' + s
+  let m = Math.floor(sec / 60)
+  let s = sec % 60
+  let mStr = m >= 10 ? m : '0' + m
+  let sStr = s >= 10 ? s : '0' + s
   return mStr + ':' + sStr
 }
 
@@ -10,7 +10,7 @@ module.exports.getClock = (minute, callback) => {
   var clock = document.createElement('div')
   clock.classList.add('clock')
 
-  var totalSeconds = min * 60
+  var totalSeconds = minute * 60
   clock.innerHTML = getTimeString(totalSeconds)
 
   const countdown = () => {
