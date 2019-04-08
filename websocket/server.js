@@ -122,7 +122,7 @@ ws.on('connection', function (client) {
               }))
             break
             case 3:
-              usersData[message.name].roundThreeIdeas = message.data
+              usersData[message.name].votedFor = message.data
               // handle vote result from user
               client.send(JSON.stringify({
                 type: "over",
@@ -132,6 +132,7 @@ ws.on('connection', function (client) {
             break
           }
           console.log(message.data)
+          console.log('-------------------------------------------------------')
         break
 
       }
@@ -219,6 +220,7 @@ customEvents.on('countDownStop', function (ev) {
 })
 
 customEvents.on('connectionClose', function (ev) {
+  console.log(`${ev.user} disconnected`)
   delete usersReady[ev.user]
   delete usersLookup[ev.userId]
   ws.clients.forEach(client => {

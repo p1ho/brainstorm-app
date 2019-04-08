@@ -12,7 +12,7 @@ function wsMessageHandler(e) {
   var state = container.getAttribute('data-state')
   if (['login', 'roundOne', 'roundTwo'].includes(state)) {
     setRoomView(container, data.users)
-  } else if (state === 'roundThree') {
+  } else if (state === 'vote') {
     setResultView(container, data.data)
     ws.close()
   } else if (state === 'room') {
@@ -107,7 +107,7 @@ function setRoomView(container, users) {
       ws.send(JSON.stringify({
         name: username,
         type: "ready",
-        message: "Ready for round 1",
+        message: "Ready for round start",
       }))
       ready.innerHTML = 'Unready'
       ready.classList.add('unready')
@@ -115,7 +115,7 @@ function setRoomView(container, users) {
       ws.send(JSON.stringify({
         name: username,
         type: "unready",
-        message: "Unready for round 1",
+        message: "Unready for round start",
       }))
       ready.innerHTML = 'Ready'
       ready.classList.remove('unready')
@@ -213,7 +213,7 @@ function setRoundTwoView(container, data) {
       e.target.classList.remove('highlight')
       ideaListUl.classList.remove('highlight')
 
-      if (e.relatedTarget.hasAttribute('data-id')) {
+      if (e.relatedTarget && e.relatedTarget.hasAttribute('data-id')) {
         e.target.value = e.relatedTarget.getAttribute('data-id')
 
         e.target.style.backgroundColor = "#ccffcc"
@@ -227,7 +227,7 @@ function setRoundTwoView(container, data) {
     })
   })
 
-  container.prepend(getClock(.3, container, () => {
+  container.prepend(getClock(.2, container, () => {
     let processedData = []
     for (let i = 1; i < numOfIdeas + 1; i++) {
       let originDatum = document.querySelector(`input[name=origin-${i}]`)
@@ -253,7 +253,6 @@ function setRoundTwoView(container, data) {
 }
 
 function setVoteView(container, data) {
-  var maxVote = 3
   container.setAttribute('data-state', 'vote')
   container.innerHTML = `
   <p>
@@ -305,9 +304,7 @@ function setVoteView(container, data) {
 
         li.addEventListener("click", toggle)
         li.addEventListener("keyup", (e) => {
-          if (e.keyCode === 13) {
-            toggle(e)
-          }
+          if (e.keyCode === 13) { toggle(e) }
         })
 
         voteListUl.appendChild(li)
@@ -315,7 +312,7 @@ function setVoteView(container, data) {
     }
   })
 
-  container.prepend(getClock(10, container, () => {
+  container.prepend(getClock(.1, container, () => {
     ws.send(JSON.stringify({
       name: username,
       type: "submission",
@@ -326,8 +323,10 @@ function setVoteView(container, data) {
   }))
 }
 
-function setResultView(container) {
-
+function setResultView(container, data) {
+  container.setAttribute('data-state', 'result')
+  container.innerHTML = "SHOW ME THE DATA"
+  console.log(data)
 }
 
 function getClock(min, container, callback) {
