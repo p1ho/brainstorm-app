@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "sass:compile": "node-sass --include-path sass sass/style.scss public/stylesheets/style.css",
-    "start": "npm run sass:compile & node ./bin/www"
+    "start": "npm run sass:compile & node app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
