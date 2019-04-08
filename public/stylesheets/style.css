@@ -7,7 +7,7 @@ h1 {
   cursor: pointer;
 }
 
-.cursor-ptr:hover {
+.cursor-ptr:hover, .cursor-ptr:focus {
   border: 1px solid #000077 !important;
 }
 
@@ -138,4 +138,8 @@ section[data-state="vote"] .vote-list-container ul {
 section[data-state="vote"] .vote-list-container li {
   padding-left: 5px;
   border: 1px solid #ccc;
+}
+
+section[data-state="vote"] .vote-list-container li.selected {
+  background-color: #ccffcc;
 }

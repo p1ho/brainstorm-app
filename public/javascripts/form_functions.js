@@ -10,8 +10,11 @@ function wsMessageHandler(e) {
   console.log(data)
   var container = document.getElementById('app')
   var state = container.getAttribute('data-state')
-  if (['login', 'roundOne', 'roundTwo', 'roundThree'].includes(state)) {
+  if (['login', 'roundOne', 'roundTwo'].includes(state)) {
     setRoomView(container, data.users)
+  } else if (state === 'roundThree') {
+    setResultView(container, data.data)
+    ws.close()
   } else if (state === 'room') {
     if (["newUser", "readyStateChange", "userDisconnect"].includes(data.type)) {
       setUsers(container, data.users)
@@ -224,7 +227,7 @@ function setRoundTwoView(container, data) {
     })
   })
 
-  container.prepend(getClock(.1, container, () => {
+  container.prepend(getClock(.3, container, () => {
     let processedData = []
     for (let i = 1; i < numOfIdeas + 1; i++) {
       let originDatum = document.querySelector(`input[name=origin-${i}]`)
@@ -250,17 +253,20 @@ function setRoundTwoView(container, data) {
 }
 
 function setVoteView(container, data) {
+  var maxVote = 3
   container.setAttribute('data-state', 'vote')
   container.innerHTML = `
   <p>
   This is the voting round, you will vote for ideas that were generated only in the second round,
-  You can only cast 3 votes.
+  You can only cast ${maxVote} votes.
   </p>
   <form autocomplete="off">
     <div class="vote-list-container"><ul></ul></div>
   </form>
   `
 
+  let selected = {}
+  let selectedTemp = []
   let voteListUl = container.querySelector('.vote-list-container ul')
   Object.keys(data).forEach(user => {
     for (let i in data[user].roundTwoIdeas) {
@@ -273,20 +279,54 @@ function setVoteView(container, data) {
           'tabindex': 0
         })
         li.innerHTML = `
-        <strong>${li.getAttribute('data-raw')}</strong>
+        <strong>${li.getAttribute('data-raw')}</strong><br>
         <em>(inspired by "${data[user].roundTwoIdeas[i].origin}")</em>
         `
+
+        selected[li.getAttribute('data-id')] = false
+
+        const toggle = (e) => {
+          let dataId = e.target.getAttribute('data-id')
+          if (e.target.classList.contains('selected')) {
+            e.target.classList.remove('selected')
+            selected[dataId] = false
+            selectedTemp.splice(selectedTemp.indexOf(dataId), 1)
+          } else {
+            e.target.classList.add('selected')
+            selected[dataId] = true
+            selectedTemp.push(dataId)
+            if (selectedTemp.length > maxVote) {
+              let dataIdToRemove = selectedTemp.shift()
+              document.querySelector(`li[data-id=${dataIdToRemove}]`).classList.remove('selected')
+              selected[dataIdToRemove] = false
+            }
+          }
+        }
+
+        li.addEventListener("click", toggle)
+        li.addEventListener("keyup", (e) => {
+          if (e.keyCode === 13) {
+            toggle(e)
+          }
+        })
+
         voteListUl.appendChild(li)
       }
     }
   })
 
-  container.prepend(getClock(.2, container, () => {
-    console.log('handle vote result submission')
+  container.prepend(getClock(10, container, () => {
+    ws.send(JSON.stringify({
+      name: username,
+      type: "submission",
+      message: "Submitted form for vote round",
+      roundNum: 3,
+      data: selected
+    }))
   }))
 }
 
-function getResultView(container) {
+function setResultView(container) {
 
 }
 

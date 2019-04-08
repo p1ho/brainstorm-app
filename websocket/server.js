@@ -123,10 +123,11 @@ ws.on('connection', function (client) {
             break
             case 3:
               usersData[message.name].roundThreeIdeas = message.data
+              // handle vote result from user
               client.send(JSON.stringify({
                 type: "over",
                 message: "The session is over, terminating and sending final results",
-                data: usersData
+                data: ['some-final-results']
               }))
             break
           }
