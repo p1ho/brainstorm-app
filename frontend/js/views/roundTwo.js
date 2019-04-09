@@ -1,7 +1,7 @@
 'use strict'
 
 const { getClock, setAttributes } = require('./utils')
-const { minPerRound, numOfIdeas, seeSelf } = require('../settings')
+const { minRoundTwo, numOfIdeas, seeSelf } = require('../settings')
 
 module.exports = (data, ws) => {
   var container = document.getElementById('app')
@@ -69,7 +69,7 @@ module.exports = (data, ws) => {
     })
   })
 
-  container.prepend(getClock(minPerRound, () => {
+  container.prepend(getClock(minRoundTwo, () => {
     let processedData = []
     for (let i = 1; i < numOfIdeas + 1; i++) {
       let originDatum = document.querySelector(`input[name=origin-${i}]`)
@@ -80,7 +80,8 @@ module.exports = (data, ws) => {
         originId: originDatum.value,
         origin: originLi !== null ? originLi.getAttribute('data-raw') : '',
         ideaId: `${originDatum.value}-${ws.username.substring(0, 3)}-${i}`,
-        idea: ideaDatum.value
+        idea: ideaDatum.value,
+        owner: ws.username
       })
     }
     ws.send(JSON.stringify({

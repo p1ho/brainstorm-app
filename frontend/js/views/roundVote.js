@@ -1,7 +1,7 @@
 'use strict'
 
 const { getClock, setAttributes } = require('./utils')
-const { minPerRound, maxVote, seeSelf } = require('../settings')
+const { minRoundVote, maxVote, seeSelf } = require('../settings')
 
 module.exports = (data, ws) => {
   var container = document.getElementById('app')
@@ -19,21 +19,23 @@ module.exports = (data, ws) => {
   let selectedTemp = []
   let voteListUl = container.querySelector('.vote-list-container ul')
   Object.keys(data).forEach(user => {
-    for (let i in data[user].roundTwoIdeas) {
+    for (let ideaObj of data[user].roundTwoIdeas) {
+      let ideaId = ideaObj.ideaId
+      let idea = ideaObj.idea
+      selected[ideaId] = false
+
       if (!(!seeSelf && ws.username === user)) {
         let li = document.createElement('li')
         li.classList.add('cursor-ptr')
         setAttributes(li, {
-          'data-id': data[user].roundTwoIdeas[i].ideaId,
-          'data-raw': data[user].roundTwoIdeas[i].idea,
+          'data-id': ideaId,
+          'data-raw': idea,
           'tabindex': 0
         })
         li.innerHTML = `
-        <strong>${li.getAttribute('data-raw')}</strong><br>
-        <em>(inspired by "${data[user].roundTwoIdeas[i].origin}")</em>
+        <strong>${ideaId}</strong><br>
+        <em>(inspired by "${ideaObj.origin}")</em>
         `
-
-        selected[li.getAttribute('data-id')] = false
 
         const toggle = (e) => {
           let targetLi = e.target.closest('li')
@@ -66,7 +68,7 @@ module.exports = (data, ws) => {
     }
   })
 
-  container.prepend(getClock(minPerRound, () => {
+  container.prepend(getClock(minRoundVote, () => {
     ws.send(JSON.stringify({
       name: ws.username,
       type: 'submission',
