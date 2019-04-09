@@ -11,6 +11,8 @@ $itemWidth: $width - ($padding * 2);
 $itemHeightLg: 50px;
 $itemHeightSm: 25px;
 $itemPadding: 5px;
+$listContainerBorder: 1px solid #aaa;
+$listItemBorder: 1px solid #ccc;
 
 $darkGreen: #006600;
 $lightGreen: #ccffcc;
@@ -121,11 +123,14 @@ $darkRed: #660000;
     ul {
       list-style-type: none;
       width: 100%;
+      height: 150px;
+      overflow: auto;
       padding: 0;
+      border: $listContainerBorder;
 
       li {
         padding-left: $itemPadding;
-        border: 1px solid #ccc;
+        border: $listItemBorder;
       }
     }
 
@@ -142,6 +147,7 @@ $darkRed: #660000;
     $origin-width: 60px;
     input[name^="origin"] {
       width: $origin-width;
+      font-size: .8rem;
     }
 
     input[name^="idea"] {
@@ -153,7 +159,7 @@ $darkRed: #660000;
 }
 
 // vote view
-#app[data-state="vote"] {
+#app[data-state="roundVote"] {
 
   .vote-list-container {
     width: $itemWidth;
@@ -163,11 +169,14 @@ $darkRed: #660000;
     ul {
       list-style-type: none;
       width: 100%;
+      height: 350px;
+      overflow: auto;
       padding: 0;
+      border: $listContainerBorder;
 
       li {
         padding-left: $itemPadding;
-        border: 1px solid #ccc;
+        border: $listItemBorder;
       }
 
     }
