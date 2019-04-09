@@ -41,6 +41,12 @@ module.exports = (event) => {
   } else if (state === 'roundVote') {
     container.setAttribute('data-state', 'result')
     viewResult(data.data)
-    ws.close()
+    if (data.type === 'over') {
+      ws.send(JSON.stringify({
+        name: ws.username,
+        type: 'confirmation',
+        message: 'received result, free to terminate'
+      }))
+    }
   }
 }
