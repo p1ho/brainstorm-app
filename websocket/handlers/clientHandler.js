@@ -11,6 +11,7 @@ module.exports = (client, uid, ws, datastore) => {
     properties.userId = client.id
     properties.ws = ws
     properties.datastore = datastore
+    properties.emitter = eventEmitter
     return properties
   }
 
@@ -36,16 +37,14 @@ module.exports = (client, uid, ws, datastore) => {
         case 'ready':
           eventEmitter.emit('readyStateChange', buildEvent({
             type: 'ready',
-            message: 'user changed ready state to ready',
-            emitter: eventEmitter // needed to trigger countdown start
+            message: 'user changed ready state to ready'
           }))
           break
 
         case 'unready':
           eventEmitter.emit('readyStateChange', buildEvent({
             type: 'unready',
-            message: 'user changed ready state to unready',
-            emitter: eventEmitter // needed to trigger countdown stop
+            message: 'user changed ready state to unready'
           }))
           break
 
@@ -65,6 +64,6 @@ module.exports = (client, uid, ws, datastore) => {
   })
 
   client.on('close', () => {
-    eventEmitter.emit('userDisconnected', buildEvent())
+    eventEmitter.emit('userDisconnect', buildEvent())
   })
 }
