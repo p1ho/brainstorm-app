@@ -1,7 +1,7 @@
 'use strict'
 
 const { getClock } = require('./utils')
-const { minRundOne, numOfIdeas } = require('../settings')
+const { minRoundOne, numOfIdeas } = require('../settings')
 
 module.exports = (ws) => {
   var container = document.getElementById('app')
@@ -20,7 +20,7 @@ module.exports = (ws) => {
     `
   }
 
-  container.prepend(getClock(minRundOne, () => {
+  container.prepend(getClock(minRoundOne, () => {
     let formData = form.querySelectorAll('input[name^=idea]')
     ws.send(JSON.stringify({
       name: ws.username,
