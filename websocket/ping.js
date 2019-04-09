@@ -1,3 +1,5 @@
+'use strict'
+
 const { pingInterval } = require('./settings')
 
 module.exports = (ws, datastore) => {

@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = (ev) => {
   let username = ev.datastore.userLookup[ev.userId]
   delete ev.datastore.userReady[username]

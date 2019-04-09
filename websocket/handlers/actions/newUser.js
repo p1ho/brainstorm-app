@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = (ev) => {
   ev.datastore.userReady[ev.username] = false
   ev.datastore.userLookup[ev.userId] = ev.username

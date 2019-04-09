@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = (ev) => {
   console.log(ev.data)
   var username = ev.datastore.userLookup[ev.userId]

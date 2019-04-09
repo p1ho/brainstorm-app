@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = (client, uid, ws, datastore) => {
   var eventEmitter = require('./eventEmitter')
 

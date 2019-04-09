@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = (ev) => {
   if (ev.timeLeft > 0) {
     ev.ws.clients.forEach(client => {

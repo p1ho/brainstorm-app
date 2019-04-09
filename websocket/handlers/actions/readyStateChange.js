@@ -1,3 +1,5 @@
+'use strict'
+
 const { roomSize, countDownTime } = require('../../settings')
 
 module.exports = (ev) => {
