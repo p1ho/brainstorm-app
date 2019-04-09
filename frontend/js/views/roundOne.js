@@ -1,3 +1,5 @@
+'use strict'
+
 const { getClock } = require('./utils')
 const { minPerRound, numOfIdeas } = require('../settings')
 

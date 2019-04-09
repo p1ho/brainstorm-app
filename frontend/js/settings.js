@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports.seeSelf = false
 module.exports.minPerRound = .1
 module.exports.numOfIdeas = 3

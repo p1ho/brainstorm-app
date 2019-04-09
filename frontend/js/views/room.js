@@ -1,3 +1,5 @@
+'use strict'
+
 const setUsers = (users) => {
   var container = document.getElementById('app')
   var connected = container.querySelector('.connected')

@@ -1,3 +1,5 @@
+'use strict'
+
 const getTimeString = (sec) => {
   let m = Math.floor(sec / 60)
   let s = sec % 60

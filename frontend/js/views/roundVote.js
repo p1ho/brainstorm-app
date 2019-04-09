@@ -1,3 +1,5 @@
+'use strict'
+
 const { getClock, setAttributes } = require('./utils')
 const { minPerRound, maxVote, seeSelf } = require('../settings')
 
