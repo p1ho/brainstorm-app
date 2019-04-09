@@ -13,6 +13,7 @@ $itemHeightSm: 25px;
 $itemPadding: 5px;
 $listContainerBorder: 1px solid #aaa;
 $listItemBorder: 1px solid #ccc;
+$defaultInputSize: 1.2rem;
 
 $darkGreen: #006600;
 $lightGreen: #ccffcc;
@@ -29,7 +30,7 @@ $darkRed: #660000;
 
   input {
     margin-top: $padding;
-    font-size: 1.2rem;
+    font-size: $defaultInputSize;
     padding-left: $itemPadding;
   }
 
@@ -144,10 +145,9 @@ $darkRed: #660000;
       width: $labelWidth;
     }
 
-    $origin-width: 60px;
+    $origin-width: 70px;
     input[name^="origin"] {
       width: $origin-width;
-      font-size: .8rem;
     }
 
     input[name^="idea"] {
