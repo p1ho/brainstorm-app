@@ -7,7 +7,9 @@ var datastore = {
   userReady: {},
   userData: {},
   userLookup: {},
-  roundNum: 1
+  roundNum: 1,
+  countDownHandle: undefined,
+  countDownSec: undefined
 }
 var uid = 0
 
