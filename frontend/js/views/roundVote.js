@@ -33,7 +33,7 @@ module.exports = (data, ws) => {
           'tabindex': 0
         })
         li.innerHTML = `
-        <strong>${ideaId}</strong><br>
+        <strong>${idea}</strong><br>
         <em>(inspired by "${ideaObj.origin}")</em>
         `
 
