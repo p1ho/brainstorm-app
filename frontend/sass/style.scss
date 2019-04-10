@@ -124,7 +124,7 @@ $darkRed: #660000;
     ul {
       list-style-type: none;
       width: 100%;
-      height: 150px;
+      max-height: 150px;
       overflow: auto;
       padding: 0;
       border: $listContainerBorder;
@@ -169,7 +169,7 @@ $darkRed: #660000;
     ul {
       list-style-type: none;
       width: 100%;
-      height: 350px;
+      max-height: 350px;
       overflow: auto;
       padding: 0;
       border: $listContainerBorder;
@@ -182,6 +182,30 @@ $darkRed: #660000;
     }
   }
 
+}
+
+// result view
+#app[data-state="result"] {
+  ul {
+    list-style-type: none;
+    width: 100%;
+    max-height: 480px;
+    overflow: auto;
+    padding: 0;
+    border: $listContainerBorder;
+
+    li {
+      padding-left: $itemPadding;
+      border: $listItemBorder;
+
+
+      .vote-count {
+        color: $darkGreen;
+        font-weight: bold;
+      }
+    }
+
+  }
 }
 
 .cursor-ptr {
