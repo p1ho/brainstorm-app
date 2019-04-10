@@ -9,6 +9,7 @@ module.exports = (ev) => {
       type: 'newUser',
       message: 'New user connected to room',
       user: ev.username,
+      userId: ev.client.id,
       users: ev.datastore.userReady
     }))
   })

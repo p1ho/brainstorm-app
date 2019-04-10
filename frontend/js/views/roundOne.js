@@ -29,7 +29,7 @@ module.exports = (ws) => {
       roundNum: 1,
       data: Array.from(formData).map((input, i) => {
         return {
-          ideaId: `${ws.username.substring(0, 3)}-${i}`,
+          ideaId: `${ws.userId.substring(0, 3)}-${i}`,
           idea: input.value,
           owner: ws.username
         }

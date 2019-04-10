@@ -13,6 +13,7 @@ module.exports = (event) => {
   var state = container.getAttribute('data-state')
 
   if (['login', 'roundOne', 'roundTwo'].includes(state)) {
+    if (state === 'login') { ws.userId = data.userId }
     container.setAttribute('data-state', 'room')
     viewRoom(data.users, ws)
   } else if (state === 'room') {

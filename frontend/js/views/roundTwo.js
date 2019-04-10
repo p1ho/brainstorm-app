@@ -28,8 +28,7 @@ module.exports = (data, ws) => {
           'data-owner': data[user].roundOneIdeas[i].owner,
           'tabindex': 0
         })
-        // li.innerHTML = `<strong>${li.getAttribute('data-id')}</strong>: ${li.getAttribute('data-raw')}`
-        li.innerHTML = li.getAttribute('data-raw')
+        li.innerHTML = `<strong>${li.getAttribute('data-id')}</strong>: ${li.getAttribute('data-raw')}`
         ideaListUl.appendChild(li)
       }
     }
@@ -82,7 +81,7 @@ module.exports = (data, ws) => {
         originId: originDatum.value,
         origin: originLi !== null ? originLi.getAttribute('data-raw') : '',
         originOwner: originLi !== null ? originLi.getAttribute('data-owner') : '',
-        ideaId: `${originDatum.value}-${ws.username.substring(0, 3)}-${i}`,
+        ideaId: `${originDatum.value}-${ws.userId.substring(0, 3)}-${i}`,
         idea: ideaDatum.value,
         owner: ws.username
       })
