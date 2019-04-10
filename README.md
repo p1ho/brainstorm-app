@@ -28,7 +28,7 @@ At the project root, type:
 $ npm run start
 ```
 This will compile the `.scss` files, bundle/minimize `.js` files, and start the server on port 80.
-At this point, you should be able to type `localhost:3000` in your browser to see the login screen.
+At this point, you should be able to type `localhost:80` in your browser to see the login screen.
 If you would like to temporarily make this app public, after running `$ npm run start` in one command line instance, create another and run `$ npm run serveo` which uses [serveo](https://serveo.net/) to create a temporary public address for other people to connect to your device.
 
 # Contributors
