@@ -1,6 +1,6 @@
 'use strict'
 
-const { pingInterval } = require('./settings')
+const { pingInterval } = require('../server.config')
 
 module.exports = (ws, datastore) => {
   var hasDropped = false

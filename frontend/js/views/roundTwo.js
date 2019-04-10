@@ -1,7 +1,7 @@
 'use strict'
 
 const { getClock, setAttributes } = require('./utils')
-const { minRoundTwo, numOfIdeas, seeSelf } = require('../settings')
+const { minRoundTwo, numOfIdeas, seeSelf } = require('../../../client.config')
 
 module.exports = (data, ws) => {
   var container = document.getElementById('app')

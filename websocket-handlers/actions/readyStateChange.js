@@ -1,6 +1,6 @@
 'use strict'
 
-const { minRoomSize, countDownTime } = require('../../settings')
+const { minRoomSize, countDownTime } = require('../../server.config')
 
 module.exports = (ev) => {
   let username = ev.datastore.userLookup[ev.userId]

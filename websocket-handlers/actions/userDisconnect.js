@@ -1,6 +1,6 @@
 'use strict'
 
-const { minRoomSize, countDownTime } = require('../../settings')
+const { minRoomSize, countDownTime } = require('../../server.config')
 
 module.exports = (ev) => {
   ev.client.isAlive = false

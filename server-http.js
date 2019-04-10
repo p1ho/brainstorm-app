@@ -5,7 +5,6 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
-var port = 3000
 
 var app = express()
 
@@ -40,12 +39,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500)
   res.render('error')
 })
-
-app.listen(port, () => {
-  console.log(`Brainstorm App started listening on port 3000`)
-})
-
-// create websocket endpoint
-require('./websocket/server')
 
 module.exports = app

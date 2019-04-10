@@ -1,7 +1,7 @@
 'use strict'
 
 const { getClock } = require('./utils')
-const { minRoundOne, numOfIdeas } = require('../settings')
+const { minRoundOne, numOfIdeas } = require('../../../client.config')
 
 module.exports = (ws) => {
   var container = document.getElementById('app')
