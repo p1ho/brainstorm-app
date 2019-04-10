@@ -41,7 +41,7 @@ module.exports = (ev) => {
   console.log('=============================================')
 
   // save data to output folder
-  let outputPath = path.resolve(`${__dirname}/../../../output/`)
+  let outputPath = path.resolve(`${__dirname}/../../output/`)
   let outputName = `${new Date().toISOString().substring(0, 19).replace(/[:\-_]/gi, '')}.json`
   let json = JSON.stringify(userData)
   console.log(`Saving data to: ${outputPath}/${outputName}`)
