@@ -9,7 +9,8 @@ var datastore = {
   userLookup: {},
   roundNum: 1,
   countDownHandle: undefined,
-  countDownSec: undefined
+  countDownSec: undefined,
+  isCountingDown: false
 }
 var uid = 0
 

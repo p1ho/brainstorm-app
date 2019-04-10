@@ -2,6 +2,7 @@
 
 module.exports = (ev) => {
   if (ev.timeLeft > 0) {
+    ev.datastore.isCountingDown = true
     ev.ws.clients.forEach(client => {
       client.send(JSON.stringify({
         type: 'countDown',
@@ -14,6 +15,7 @@ module.exports = (ev) => {
     let userReady = ev.datastore.userReady
     Object.keys(userReady).forEach(user => {
       userReady[user] = false
+      ev.datastore.isCountingDown = false
     })
     var formData
     switch (ev.datastore.roundNum) {

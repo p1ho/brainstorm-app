@@ -27,12 +27,22 @@ module.exports = (ev) => {
 
     case 3:
       ev.datastore.userData[username].roundVote = ev.data
-      // handle vote result from user
-      ev.client.send(JSON.stringify({
-        type: 'over',
-        message: 'The session is over, sending final results. Please return a confirmation',
-        data: ['some-final-results']
-      }))
+
+      // emit data collection complete when all users have data in roundVote
+      let usersAll = Object.keys(ev.datastore.userReady)
+      let collectionComplete = true
+      for (let user of usersAll) {
+        if (!ev.datastore.userData[user].hasOwnProperty('roundVote')) {
+          collectionComplete = false
+          break
+        }
+      }
+      if (collectionComplete) {
+        ev.emitter.emit('collectionComplete', {
+          ws: ev.ws,
+          datastore: ev.datastore
+        })
+      }
       break
   }
 }
