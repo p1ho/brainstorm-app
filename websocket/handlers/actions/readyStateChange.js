@@ -28,6 +28,7 @@ module.exports = (ev) => {
   }
 
   if (allReady()) {
+    ev.datastore.countDownSec = countDownTime
     ev.datastore.countDownHandle = setInterval(() => {
       let sec = ev.datastore.countDownSec
       if (sec !== 0) {
