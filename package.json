@@ -5,8 +5,9 @@
   "scripts": {
     "sass:compile": "node-sass --include-path sass frontend/sass/style.scss public/css/style.css",
     "build": "webpack & npm run sass:compile",
-    "start": "npm run build & node app.js",
-    "style-fix": "standard --fix"
+    "start": "npm run build & node server-ws.js",
+    "style-fix": "standard --fix",
+    "serveo": "ssh -R brainstorm:80:localhost:80 serveo.net"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
