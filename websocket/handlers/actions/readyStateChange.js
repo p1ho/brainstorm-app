@@ -23,7 +23,7 @@ module.exports = (ev) => {
 
   const allReady = () => {
     return (ev.type === 'ready' &&
-            Object.keys(userReady).length === minRoomSize &&
+            Object.keys(userReady).length >= minRoomSize &&
             !Object.values(userReady).includes(false))
   }
 
