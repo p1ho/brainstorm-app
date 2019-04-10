@@ -27,9 +27,9 @@ At the project root, type:
 ```Bash
 $ npm run start
 ```
-This will compile the `.scss` files, bundle/minimize `.js` files, and start the server on port 3000.
+This will compile the `.scss` files, bundle/minimize `.js` files, and start the server on port 80.
 At this point, you should be able to type `localhost:3000` in your browser to see the login screen.
-You will also be able to use tunneling tools like [ngrok](https://ngrok.com/) to create a temporary public address for other people to connect to your device.
+If you would like to temporarily make this app public, after running `$ npm run start` in one command line instance, create another and run `$ npm run serveo` which uses [serveo](https://serveo.net/) to create a temporary public address for other people to connect to your device.
 
 # Contributors
 |[![](https://github.com/p1ho.png?size=50)](https://github.com/p1ho)
