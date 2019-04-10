@@ -30,7 +30,8 @@ module.exports = (ws) => {
       data: Array.from(formData).map((input, i) => {
         return {
           ideaId: `${ws.username.substring(0, 3)}-${i}`,
-          idea: input.value
+          idea: input.value,
+          owner: ws.username
         }
       })
     }))
