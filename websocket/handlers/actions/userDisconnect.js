@@ -34,11 +34,9 @@ module.exports = (ev) => {
     ev.emitter.emit('countDownStop', { ws: ev.ws })
   }
 
-  // if disconnect happens at the end
-  console.log(ev.ws.clients.size)
-  // if everyone disconnected and we have data
+  // shutdown server if everyone disconnected at the end and we have data
   if (ev.ws.clients.size === 0 && ev.datastore.result !== undefined) {
-    console.log('everyone disconnected, terminating script')
-    process.exit(0)
+    console.log('everyone disconnected, terminating script...')
+    ev.emitter.emit('shutdownServer', { datastore: ev.datastore })
   }
 }

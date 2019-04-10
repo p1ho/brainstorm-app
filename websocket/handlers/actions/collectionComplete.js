@@ -10,6 +10,7 @@ module.exports = (ev) => {
       ideaLookup[idea.ideaId] = idea
     })
   })
+  ev.datastore.ideaLookup = ideaLookup
 
   let tally = {}
   Object.keys(userData).forEach(username => {
@@ -24,7 +25,6 @@ module.exports = (ev) => {
       }
     })
   })
-
   ev.datastore.result = tally
 
   // notify clients

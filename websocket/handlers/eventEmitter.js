@@ -13,7 +13,8 @@ var eventList = [
   'countDownStop',
   'collectionComplete',
   'userDisconnect',
-  'disconnectUser'
+  'disconnectUser',
+  'shutdownServer'
 ]
 
 for (let eventname of eventList) {
