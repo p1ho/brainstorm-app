@@ -10,8 +10,15 @@ TODO: link to report
 
 This application was built using [Node.js](https://nodejs.org/en/) and uses primarily [Express](https://expressjs.com/) and [WebSocket](https://www.npmjs.com/package/ws) to control client view. WebSocket was used because this app is meant to be used in a team brainstorm session where everyone is present, so a way to ensure synchronized views on everyone's devices was needed.
 
-* Client-side code: `./frontend/js`
-* Server-side code: `./websocket`
+* Client Side
+  - **config** `./client.config.js`
+  - **code** `./frontend/js`
+* Server Side
+  - **config** `./server.config.js`
+  - **code**
+      - `./server-http.js`
+      - `./server-ws.js`
+      - `./websocket-handlers`
 
 # How to install
 
@@ -29,7 +36,7 @@ $ npm run start
 ```
 This will compile the `.scss` files, bundle/minimize `.js` files, and start the server on port 80.
 At this point, you should be able to type `localhost:80` in your browser to see the login screen.
-If you would like to temporarily make this app public, after running `$ npm run start` in one command line instance, create another and run `$ npm run serveo` which uses [serveo](https://serveo.net/) to create a temporary public address for other people to connect to your device.
+If you would like to temporarily make this app public, after running `$ npm run start` in one command line instance, open another command line window and run `$ npm run serveo`, this uses [serveo](https://serveo.net/) to create a temporary public address for other people to connect to your device.
 
 # Contributors
 |[![](https://github.com/p1ho.png?size=50)](https://github.com/p1ho)
