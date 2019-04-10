@@ -10,7 +10,7 @@ module.exports = (data) => {
   <ul></ul>
   `
   let ideaList = Object.values(data)
-  ideaList.sort((a, b) => (a.count > b.count) ? 1: -1)
+  ideaList.sort((a, b) => (a.count < b.count) ? 1: -1)
 
   let ul = container.querySelector('ul')
   for (let ideaObj of ideaList) {
