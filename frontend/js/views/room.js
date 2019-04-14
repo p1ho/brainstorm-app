@@ -22,8 +22,10 @@ module.exports.viewRoom = (users, ws) => {
   container.innerHTML = `
   <h2>Connected</h2>
   <div class="connected"></div>
+  <form>
   <p>Round will start when everyone is ready</p>
-  <form><input type="submit" value="Ready"></form>
+  <input type="submit" value="Ready">
+  </form>
   `
   setUsers(users)
 

@@ -9,7 +9,7 @@ module.exports = () => {
   container.innerHTML = `
     <form autocomplete="off">
       <label>Enter Name</label><br>
-      <input type="text" name="name"><br>
+      <input type="text" name="name" maxlength="30"><br>
       <input type="submit" value="Connect">
     </form>
   `

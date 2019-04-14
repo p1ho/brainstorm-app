@@ -5,7 +5,7 @@ h1 {
 
 // app
 $width: 500px;
-$height: 550px;
+$height: 600px;
 $padding: 20px;
 $itemWidth: $width - ($padding * 2);
 $itemHeightLg: 50px;
@@ -23,13 +23,13 @@ $darkRed: #660000;
 #app {
   width: $width;
   height: $height;
-  margin: 50px auto 0 auto;
+  margin: 20px auto 0 auto;
   box-shadow: 0 2px 10px #ccc;
   padding: $padding;
   box-sizing: border-box;
 
   input {
-    margin-top: $padding;
+    margin-bottom: $padding;
     font-size: $defaultInputSize;
     padding-left: $itemPadding;
   }
@@ -78,12 +78,13 @@ $darkRed: #660000;
   }
 
   div.connected {
-    height: 75px;
+    height: $height - 200px;
+    width: $itemWidth;
+    overflow: auto;
 
     div {
-      display: inline-block;
       border-radius: $itemHeightLg;
-      width: 75px;
+      width: 100%;
       height: $itemHeightLg;
       line-height: $itemHeightLg;
       background-color: $darkGreen;
@@ -93,9 +94,10 @@ $darkRed: #660000;
       margin-right: 10px;
     }
 
-    .unready {
-      background-color: $darkRed;
-    }
+  }
+
+  .unready {
+    background-color: $darkRed !important;
   }
 
 }
@@ -124,7 +126,7 @@ $darkRed: #660000;
     ul {
       list-style-type: none;
       width: 100%;
-      max-height: 150px;
+      max-height: 200px;
       overflow: auto;
       padding: 0;
       border: $listContainerBorder;
