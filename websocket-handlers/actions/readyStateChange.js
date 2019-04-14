@@ -19,7 +19,7 @@ module.exports = (ev) => {
 
   userReady[username] = (ev.type === 'ready')
   notifyClient()
-  console.log(userReady)
+  console.log(JSON.stringify(userReady, null, 4))
 
   const allReady = () => {
     return (ev.type === 'ready' &&

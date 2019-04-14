@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = (ev) => {
-  console.log(ev.data)
+  console.log(JSON.stringify(ev.data, null, 4))
   var username = ev.datastore.userLookup[ev.userId]
 
   switch (ev.roundNum) {
