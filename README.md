@@ -4,7 +4,8 @@
 
 This is a prototype on a brainstorming workflow my team worked on in **[DESCI 502](https://www.coursicle.com/umich/courses/DESCI/502/)**. The goal is to impose certain restrictions on the brainstorm activity to prevent **[Design Fixation](https://www.fastcompany.com/3044535/what-is-design-fixation-and-how-can-you-stop-it)** from happening in an interdisciplinary team setting.
 
-TODO: link to report
+[PDF Link to Poster](https://github.com/p1ho/brainstorm-app/raw/master/static/brainstorm-app-poster.pdf)
+![](https://github.com/p1ho/brainstorm-app/raw/master/static/brainstorm-app-poster.jpg | width=500)
 
 # Technical Aspect
 
