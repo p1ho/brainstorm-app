@@ -6,7 +6,7 @@ This is a prototype on a brainstorming workflow my team worked on in **[DESCI 50
 
 <img src="https://github.com/p1ho/brainstorm-app/raw/master/static/brainstorm-app-poster.jpg" alt="brainstorm-app-poster" width="500" />
 
-[PDF Link to Poster](https://github.com/p1ho/brainstorm-app/raw/master/static/brainstorm-app-poster.pdf)
+[PDF download](https://github.com/p1ho/brainstorm-app/raw/master/static/brainstorm-app-poster.pdf)
 
 # Technical Aspect
 
