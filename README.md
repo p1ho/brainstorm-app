@@ -4,8 +4,9 @@
 
 This is a prototype on a brainstorming workflow my team worked on in **[DESCI 502](https://www.coursicle.com/umich/courses/DESCI/502/)**. The goal is to impose certain restrictions on the brainstorm activity to prevent **[Design Fixation](https://www.fastcompany.com/3044535/what-is-design-fixation-and-how-can-you-stop-it)** from happening in an interdisciplinary team setting.
 
+<img src="https://github.com/p1ho/brainstorm-app/raw/master/static/brainstorm-app-poster.jpg" alt="brainstorm-app-poster" width="500" />
+
 [PDF Link to Poster](https://github.com/p1ho/brainstorm-app/raw/master/static/brainstorm-app-poster.pdf)
-![](https://github.com/p1ho/brainstorm-app/raw/master/static/brainstorm-app-poster.jpg | width=500)
 
 # Technical Aspect
 
@@ -43,8 +44,3 @@ If you would like to temporarily make this app public, after running `$ npm run 
 # Analysis
 
 After the results are collected, the console will print out a summary of design fixation score for the session. If you'd like to see the same summary later, at the project root, run `$ node analysis.js <name-of-the-json-file>` without the `.json` suffix (For example, if the output's filename `123.json`, run `$ node analysis.js 123`)
-
-# Contributors
-|[![](https://github.com/p1ho.png?size=50)](https://github.com/p1ho)
-|---|
-|[p1ho](https://github.com/p1ho)|
